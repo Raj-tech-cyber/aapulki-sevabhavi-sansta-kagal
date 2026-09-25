@@ -1,0 +1,29 @@
+backend:
+  name: github
+  repo: raj-tech-cyber/idyllic-eclair-255834
+  branch: main
+media_folder: "uploads"
+public_folder: "/uploads"
+collections:
+  - name: "events"
+    label: "कार्यक्रम / उपक्रम"
+    folder: "content/events"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "कार्यक्रमाचे नाव", name: "title", widget: "string"}
+      - {label: "तारीख", name: "date", widget: "datetime", format: "YYYY-MM-DD HH:mm"}
+      - {label: "ठिकाण", name: "location", widget: "string", required: false}
+      - {label: "मुख्य फोटो", name: "image", widget: "image", required: false}
+      - {label: "कार्यक्रमाची माहिती", name: "body", widget: "markdown"}
+      - {label: "प्रकाशित करायचे?", name: "published", widget: "boolean", default: true}
+  - name: "announcements"
+    label: "बातम्या / घोषणा"
+    folder: "content/announcements"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "शीर्षक", name: "title", widget: "string"}
+      - {label: "तारीख", name: "date", widget: "datetime", format: "YYYY-MM-DD HH:mm"}
+      - {label: "माहिती", name: "body", widget: "markdown"}
+      - {label: "प्रकाशित करायचे?", name: "published", widget: "boolean", default: true}
