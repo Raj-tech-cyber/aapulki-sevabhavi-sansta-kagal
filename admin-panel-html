@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>आपुलकी सेवाभावी संस्था - Admin Panel</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f4f6f8;
+      margin:0;
+      padding:20px;
+    }
+
+    .container{
+      max-width:700px;
+      margin:auto;
+      background:white;
+      padding:25px;
+      border-radius:15px;
+      box-shadow:0 3px 15px rgba(0,0,0,.10);
+    }
+
+    h1{
+      text-align:center;
+      color:#166534;
+      margin-bottom:5px;
+    }
+
+    .subtitle{
+      text-align:center;
+      color:#666;
+      margin-bottom:25px;
+    }
+
+    label{
+      display:block;
+      margin-top:15px;
+      margin-bottom:6px;
+      font-weight:bold;
+    }
+
+    input, textarea{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      font-size:16px;
+    }
+
+    textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    button{
+      width:100%;
+      padding:13px;
+      margin-top:20px;
+      border:0;
+      border-radius:8px;
+      background:#166534;
+      color:white;
+      font-size:17px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#14532d;
+    }
+
+    .logout{
+      background:#b91c1c;
+    }
+
+    .message{
+      margin-top:15px;
+      padding:12px;
+      border-radius:8px;
+      display:none;
+    }
+
+    .success{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .error{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    #panel{
+      display:none;
+    }
+
+    .event{
+      background:#f8fafc;
+      border:1px solid #ddd;
+      padding:15px;
+      border-radius:10px;
+      margin-top:15px;
+    }
+
+    .event h3{
+      margin-top:0;
+      color:#166534;
+    }
+
+    .delete{
+      background:#dc2626;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>आपुलकी सेवाभावी संस्था</h1>
+  <div class="subtitle">Admin Panel</div>
+
+  <!-- LOGIN -->
+  <div id="loginBox">
+
+    <label>ई-मेल</label>
+    <input type="email" id="email" placeholder="Admin Email">
+
+    <label>पासवर्ड</label>
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="loginMessage" class="message"></div>
+
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+  <div id="panel">
+
+    <h2>नवीन कार्यक्रम / उपक्रम</h2>
+
+    <label>कार्यक्रमाचे नाव</label>
+    <input type="text" id="title" placeholder="उदा. मोफत आरोग्य शिबिर">
+
+    <label>तारीख</label>
+    <input type="datetime-local" id="date">
+
+    <label>ठिकाण</label>
+    <input type="text" id="location" placeholder="कार्यक्रमाचे ठिकाण">
+
+    <label>फोटो URL</label>
+    <input type="text" id="image" placeholder="फोटो URL असल्यास येथे टाका">
+
+    <label>कार्यक्रमाची माहिती</label>
+    <textarea id="description" placeholder="कार्यक्रमाची संपूर्ण माहिती येथे लिहा"></textarea>
+
+    <button onclick="addEvent()">कार्यक्रम सेव्ह करा</button>
+
+    <div id="eventMessage" class="message"></div>
+
+    <hr style="margin-top:30px">
+
+    <h2>जतन केलेले कार्यक्रम</h2>
+
+    <div id="eventsList">
+      कार्यक्रमांची माहिती लोड होत आहे...
+    </div>
+
+    <button class="logout" onclick="logout()">Logout</button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /* =====================================================
+     SUPABASE SETTINGS
+     ===================================================== */
+
+  const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+  /* =====================================================
+     LOGIN
+     ===================================================== */
+
+  async function login(){
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const message =
+      document.getElementById("loginMessage");
+
+    message.style.display = "none";
+
+    if(!email || !password){
+
+      message.className = "message error";
+      message.innerText =
+        "कृपया ई-मेल आणि पासवर्ड भरा.";
+      message.style.display = "block";
+
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if(error){
+
+      message.className = "message error";
+      message.innerText =
+        "Login failed: " + error.message;
+      message.style.display = "block";
+
+      return;
+    }
+
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+
+    loadEvents();
+  }
+
+
+  /* =====================================================
+     CHECK LOGIN
+     ===================================================== */
+
+  async function checkUser(){
+
+    const { data } =
+      await supabaseClient.auth.getSession();
+
+    if(data.session){
+
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("panel").style.display = "block";
+
+      loadEvents();
+    }
+  }
+
+
+  /* =====================================================
+     ADD EVENT
+     ===================================================== */
+
+  async function addEvent(){
+
+    const title =
+      document.getElementById("title").value.trim();
+
+    const date =
+      document.getElementById("date").value;
+
+    const location =
+      document.getElementById("location").value.trim();
+
+    const image =
+      document.getElementById("image").value.trim();
+
+    const description =
+      document.getElementById("description").value.trim();
+
+    const message =
+      document.getElementById("eventMessage");
+
+    if(!title){
+
+      message.className = "message error";
+      message.innerText =
+        "कृपया कार्यक्रमाचे नाव भरा.";
+      message.style.display = "block";
+
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("events")
+        .insert([
+          {
+            title: title,
+            date: date || null,
+            location: location || null,
+            image: image || null,
+            description: description || null
+          }
+        ]);
+
+    if(error){
+
+      message.className = "message error";
+      message.innerText =
+        "कार्यक्रम सेव्ह झाला नाही: " + error.message;
+      message.style.display = "block";
+
+      return;
+    }
+
+    message.className = "message success";
+    message.innerText =
+      "कार्यक्रम यशस्वीपणे सेव्ह झाला.";
+    message.style.display = "block";
+
+    document.getElementById("title").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("image").value = "";
+    document.getElementById("description").value = "";
+
+    loadEvents();
+  }
+
+
+  /* =====================================================
+     LOAD EVENTS
+     ===================================================== */
+
+  async function loadEvents(){
+
+    const list =
+      document.getElementById("eventsList");
+
+    const { data, error } =
+      await supabaseClient
+        .from("events")
+        .select("*")
+        .order("created_at", { ascending:false });
+
+    if(error){
+
+      list.innerHTML =
+        "<p style='color:red'>कार्यक्रम लोड करता आला नाही.</p>";
+
+      return;
+    }
+
+    if(!data || data.length === 0){
+
+      list.innerHTML =
+        "<p>अजून कोणताही कार्यक्रम सेव्ह केलेला नाही.</p>";
+
+      return;
+    }
+
+    list.innerHTML = "";
+
+    data.forEach(event => {
+
+      const div = document.createElement("div");
+
+      div.className = "event";
+
+      div.innerHTML = `
+        <h3>${escapeHtml(event.title || "")}</h3>
+
+        <p>
+          <strong>तारीख:</strong>
+          ${event.date ? new Date(event.date).toLocaleString("mr-IN") : "-"}
+        </p>
+
+        <p>
+          <strong>ठिकाण:</strong>
+          ${escapeHtml(event.location || "-")}
+        </p>
+
+        <p>
+          ${escapeHtml(event.description || "")}
+        </p>
+
+        <button class="delete"
+          onclick="deleteEvent('${event.id}')">
+          कार्यक्रम Delete करा
+        </button>
+      `;
+
+      list.appendChild(div);
+
+    });
+  }
+
+
+  /* =====================================================
+     DELETE EVENT
+     ===================================================== */
+
+  async function deleteEvent(id){
+
+    if(!confirm("हा कार्यक्रम Delete करायचा आहे का?")){
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("events")
+        .delete()
+        .eq("id", id);
+
+    if(error){
+
+      alert(
+        "Delete करता आले नाही: " +
+        error.message
+      );
+
+      return;
+    }
+
+    loadEvents();
+  }
+
+
+  /* =====================================================
+     LOGOUT
+     ===================================================== */
+
+  async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+  }
+
+
+  /* =====================================================
+     SECURITY
+     ===================================================== */
+
+  function escapeHtml(text){
+
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+
+  checkUser();
+
+</script>
+
+</body>
+</html>
