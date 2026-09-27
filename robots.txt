@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://idyllic-eclair-255834.netlify.app/sitemap.xml
