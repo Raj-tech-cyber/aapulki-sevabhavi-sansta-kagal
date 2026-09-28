@@ -1,276 +1,587 @@
+
 <!DOCTYPE html>
 <html lang="mr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>आपुलकी सेवाभावी संस्था - Admin Panel</title>
+
+  <title>आपुलकी संस्था - Admin Panel</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body{
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background:#f4f6f8;
-      margin:0;
-      padding:20px;
+      background: #f4f6f8;
+      color: #222;
     }
 
-    .container{
-      max-width:700px;
-      margin:auto;
-      background:white;
-      padding:25px;
-      border-radius:15px;
-      box-shadow:0 3px 15px rgba(0,0,0,.10);
+    .header {
+      background: #0b5ed7;
+      color: white;
+      padding: 18px;
+      text-align: center;
     }
 
-    h1{
-      text-align:center;
-      color:#166534;
-      margin-bottom:5px;
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    .subtitle{
-      text-align:center;
-      color:#666;
-      margin-bottom:25px;
+    .header p {
+      margin: 6px 0 0;
+      font-size: 14px;
     }
 
-    label{
-      display:block;
-      margin-top:15px;
-      margin-bottom:6px;
-      font-weight:bold;
+    .container {
+      max-width: 850px;
+      margin: 25px auto;
+      padding: 0 15px;
     }
 
-    input, textarea{
-      width:100%;
-      box-sizing:border-box;
-      padding:12px;
-      border:1px solid #ccc;
-      border-radius:8px;
-      font-size:16px;
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    textarea{
-      min-height:130px;
-      resize:vertical;
+    h2 {
+      margin-top: 0;
+      color: #0b5ed7;
     }
 
-    button{
-      width:100%;
-      padding:13px;
-      margin-top:20px;
-      border:0;
-      border-radius:8px;
-      background:#166534;
-      color:white;
-      font-size:17px;
-      cursor:pointer;
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 16px;
+      margin-bottom: 7px;
     }
 
-    button:hover{
-      background:#14532d;
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
     }
 
-    .logout{
-      background:#b91c1c;
+    textarea {
+      min-height: 150px;
+      resize: vertical;
     }
 
-    .message{
-      margin-top:15px;
-      padding:12px;
-      border-radius:8px;
-      display:none;
+    input[type="file"] {
+      background: #f8f9fa;
+      padding: 10px;
     }
 
-    .success{
-      background:#dcfce7;
-      color:#166534;
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 18px;
     }
 
-    .error{
-      background:#fee2e2;
-      color:#991b1b;
+    .primary {
+      background: #0b5ed7;
+      color: white;
+      width: 100%;
     }
 
-    #panel{
-      display:none;
+    .logout {
+      background: #dc3545;
+      color: white;
+      float: right;
+      margin-top: -45px;
     }
 
-    .event{
-      background:#f8fafc;
-      border:1px solid #ddd;
-      padding:15px;
-      border-radius:10px;
-      margin-top:15px;
+    .hidden {
+      display: none !important;
     }
 
-    .event h3{
-      margin-top:0;
-      color:#166534;
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
     }
 
-    .delete{
-      background:#dc2626;
-      font-size:14px;
+    .success {
+      background: #d1e7dd;
+      color: #0f5132;
+      display: block;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #842029;
+      display: block;
+    }
+
+    .preview {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .preview img {
+      max-width: 100%;
+      max-height: 280px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .event {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      background: #fafafa;
+    }
+
+    .event img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .event h3 {
+      margin: 0 0 8px;
+      color: #0b5ed7;
+    }
+
+    .event p {
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .small {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 15px;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 16px;
+      }
+
+      .header h1 {
+        font-size: 21px;
+      }
+
+      .logout {
+        float: none;
+        margin-top: 15px;
+        width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <h1>आपुलकी सेवाभावी संस्था</h1>
-  <div class="subtitle">Admin Panel</div>
-
-  <!-- LOGIN -->
-  <div id="loginBox">
-
-    <label>ई-मेल</label>
-    <input type="email" id="email" placeholder="Admin Email">
-
-    <label>पासवर्ड</label>
-    <input type="password" id="password" placeholder="Password">
-
-    <button onclick="login()">Login</button>
-
-    <div id="loginMessage" class="message"></div>
-
+  <div class="header">
+    <h1>आपुलकी सेवाभावी संस्था</h1>
+    <p>Admin Panel</p>
   </div>
 
+  <div class="container">
 
-  <!-- ADMIN PANEL -->
-  <div id="panel">
+    <!-- LOGIN -->
+    <div id="loginCard" class="card">
+      <h2>🔐 Admin Login</h2>
 
-    <h2>नवीन कार्यक्रम / उपक्रम</h2>
+      <label for="loginEmail">Email</label>
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Admin Email"
+        autocomplete="email"
+      >
 
-    <label>कार्यक्रमाचे नाव</label>
-    <input type="text" id="title" placeholder="उदा. मोफत आरोग्य शिबिर">
+      <label for="loginPassword">Password</label>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
 
-    <label>तारीख</label>
-    <input type="datetime-local" id="date">
+      <button class="primary" onclick="login()">
+        Login
+      </button>
 
-    <label>ठिकाण</label>
-    <input type="text" id="location" placeholder="कार्यक्रमाचे ठिकाण">
-
-    <label>फोटो URL</label>
-    <input type="text" id="image" placeholder="फोटो URL असल्यास येथे टाका">
-
-    <label>कार्यक्रमाची माहिती</label>
-    <textarea id="description" placeholder="कार्यक्रमाची संपूर्ण माहिती येथे लिहा"></textarea>
-
-    <button onclick="addEvent()">कार्यक्रम सेव्ह करा</button>
-
-    <div id="eventMessage" class="message"></div>
-
-    <hr style="margin-top:30px">
-
-    <h2>जतन केलेले कार्यक्रम</h2>
-
-    <div id="eventsList">
-      कार्यक्रमांची माहिती लोड होत आहे...
+      <div id="loginMessage" class="message"></div>
     </div>
 
-    <button class="logout" onclick="logout()">Logout</button>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="hidden">
+
+      <div class="card">
+        <h2>📢 नवीन कार्यक्रम / उपक्रम जोडा</h2>
+
+        <button class="logout" onclick="logout()">
+          Logout
+        </button>
+
+        <label for="title">
+          कार्यक्रमाचे नाव *
+        </label>
+
+        <input
+          type="text"
+          id="title"
+          placeholder="उदा. मोफत आरोग्य तपासणी शिबिर"
+        >
+
+
+        <label for="date">
+          कार्यक्रमाची तारीख *
+        </label>
+
+        <input
+          type="date"
+          id="date"
+        >
+
+
+        <label for="location">
+          ठिकाण
+        </label>
+
+        <input
+          type="text"
+          id="location"
+          placeholder="उदा. कागल"
+        >
+
+
+        <label for="description">
+          कार्यक्रमाची सविस्तर माहिती *
+        </label>
+
+        <textarea
+          id="description"
+          placeholder="कार्यक्रमामध्ये काय झाले, कोण सहभागी झाले, संस्थेने काय काम केले इत्यादी माहिती येथे लिहा."
+        ></textarea>
+
+
+        <label for="imageFile">
+          📷 कार्यक्रमाचा फोटो
+        </label>
+
+        <input
+          type="file"
+          id="imageFile"
+          accept="image/*"
+          onchange="previewImage()"
+        >
+
+        <div class="small">
+          मोबाईलच्या Gallery मधून फोटो थेट निवडा.
+          फोटो URL स्वतः टाकण्याची गरज नाही.
+        </div>
+
+        <div id="imagePreview" class="preview"></div>
+
+
+        <button
+          class="primary"
+          onclick="saveEvent()"
+          id="saveButton"
+        >
+          कार्यक्रम प्रकाशित करा
+        </button>
+
+        <div id="saveMessage" class="message"></div>
+
+      </div>
+
+
+      <!-- EVENTS -->
+      <div class="card">
+
+        <h2>📋 प्रकाशित कार्यक्रम</h2>
+
+        <div id="eventsList">
+          <div class="loading">
+            कार्यक्रमांची माहिती लोड होत आहे...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
-
-</div>
 
 
 <script>
 
-  /* =====================================================
-     SUPABASE SETTINGS
-     ===================================================== */
-  const SUPABASE_URL = "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
+  /*
+    ==================================================
+    SUPABASE SETTINGS
+    ==================================================
+
+    येथे तुमच्या सध्याच्या admin.html मधील
+    आधीचेच SUPABASE_URL आणि
+    SUPABASE_PUBLISHABLE_KEY ठेवा.
+
+    SECRET KEY / SERVICE ROLE KEY वापरू नका.
+  */
+
+  const SUPABASE_URL =
+    "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
 
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_Cyo3uCseac7_E1FoYXc4OA_4KVjDaMP";
 
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  const supabaseClient =
+    supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
-  /* =====================================================
-     LOGIN
-     ===================================================== */
+  // -----------------------------
+  // Login
+  // -----------------------------
 
-  async function login(){
+  async function login() {
 
     const email =
-      document.getElementById("email").value.trim();
+      document.getElementById("loginEmail").value.trim();
 
     const password =
-      document.getElementById("password").value;
+      document.getElementById("loginPassword").value;
 
     const message =
       document.getElementById("loginMessage");
 
-    message.style.display = "none";
+    message.className = "message";
+    message.textContent = "";
 
-    if(!email || !password){
-
-      message.className = "message error";
-      message.innerText =
-        "कृपया ई-मेल आणि पासवर्ड भरा.";
-      message.style.display = "block";
-
+    if (!email || !password) {
+      showMessage(
+        message,
+        "Email आणि Password दोन्ही भरा.",
+        "error"
+      );
       return;
     }
 
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+    try {
 
-    if(error){
+      const result =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
-      message.className = "message error";
-      message.innerText =
-        "Login failed: " + error.message;
-      message.style.display = "block";
+      if (result.error) {
+        showMessage(
+          message,
+          "Login failed: " + result.error.message,
+          "error"
+        );
+        return;
+      }
 
-      return;
+      showAdminPanel();
+
+    } catch (error) {
+
+      showMessage(
+        message,
+        "Login failed: " + error.message,
+        "error"
+      );
+
     }
+  }
 
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("panel").style.display = "block";
+
+  // -----------------------------
+  // Check existing login
+  // -----------------------------
+
+  async function checkUser() {
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabaseClient.auth.getUser();
+
+      if (!error && data && data.user) {
+        showAdminPanel();
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  // -----------------------------
+  // Show Admin
+  // -----------------------------
+
+  function showAdminPanel() {
+
+    document
+      .getElementById("loginCard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("adminPanel")
+      .classList.remove("hidden");
 
     loadEvents();
   }
 
 
-  /* =====================================================
-     CHECK LOGIN
-     ===================================================== */
+  // -----------------------------
+  // Logout
+  // -----------------------------
 
-  async function checkUser(){
+  async function logout() {
 
-    const { data } =
-      await supabaseClient.auth.getSession();
+    await supabaseClient.auth.signOut();
 
-    if(data.session){
+    document
+      .getElementById("adminPanel")
+      .classList.add("hidden");
 
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("panel").style.display = "block";
+    document
+      .getElementById("loginCard")
+      .classList.remove("hidden");
 
-      loadEvents();
-    }
   }
 
 
-  /* =====================================================
-     ADD EVENT
-     ===================================================== */
+  // -----------------------------
+  // Image Preview
+  // -----------------------------
 
-  async function addEvent(){
+  function previewImage() {
+
+    const fileInput =
+      document.getElementById("imageFile");
+
+    const preview =
+      document.getElementById("imagePreview");
+
+    preview.innerHTML = "";
+
+    if (!fileInput.files || !fileInput.files[0]) {
+      return;
+    }
+
+    const file = fileInput.files[0];
+
+    if (!file.type.startsWith("image/")) {
+      preview.innerHTML =
+        "<p style='color:red;'>कृपया फक्त फोटो निवडा.</p>";
+      return;
+    }
+
+    const image =
+      document.createElement("img");
+
+    image.src =
+      URL.createObjectURL(file);
+
+    preview.appendChild(image);
+
+  }
+
+
+  // -----------------------------
+  // Upload Image
+  // -----------------------------
+
+  async function uploadImage(file) {
+
+    if (!file) {
+      return null;
+    }
+
+    const extension =
+      file.name.split(".").pop();
+
+    const safeExtension =
+      extension.toLowerCase();
+
+    const fileName =
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2, 10) +
+      "." +
+      safeExtension;
+
+    const filePath =
+      "events/" + fileName;
+
+
+    const uploadResult =
+      await supabaseClient.storage
+        .from("uploads")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+
+    if (uploadResult.error) {
+      throw new Error(
+        "फोटो upload झाला नाही: " +
+        uploadResult.error.message
+      );
+    }
+
+
+    const publicResult =
+      supabaseClient.storage
+        .from("uploads")
+        .getPublicUrl(filePath);
+
+
+    return publicResult.data.publicUrl;
+  }
+
+
+  // -----------------------------
+  // Save Event
+  // -----------------------------
+
+  async function saveEvent() {
 
     const title =
       document.getElementById("title").value.trim();
@@ -281,187 +592,328 @@
     const location =
       document.getElementById("location").value.trim();
 
-    const image =
-      document.getElementById("image").value.trim();
-
     const description =
       document.getElementById("description").value.trim();
 
+    const imageFile =
+      document.getElementById("imageFile").files[0];
+
     const message =
-      document.getElementById("eventMessage");
+      document.getElementById("saveMessage");
 
-    if(!title){
-
-      message.className = "message error";
-      message.innerText =
-        "कृपया कार्यक्रमाचे नाव भरा.";
-      message.style.display = "block";
-
-      return;
-    }
-
-    const { error } =
-      await supabaseClient
-        .from("events")
-        .insert([
-          {
-            title: title,
-            date: date || null,
-            location: location || null,
-            image: image || null,
-            description: description || null
-          }
-        ]);
-
-    if(error){
-
-      message.className = "message error";
-      message.innerText =
-        "कार्यक्रम सेव्ह झाला नाही: " + error.message;
-      message.style.display = "block";
-
-      return;
-    }
-
-    message.className = "message success";
-    message.innerText =
-      "कार्यक्रम यशस्वीपणे सेव्ह झाला.";
-    message.style.display = "block";
-
-    document.getElementById("title").value = "";
-    document.getElementById("date").value = "";
-    document.getElementById("location").value = "";
-    document.getElementById("image").value = "";
-    document.getElementById("description").value = "";
-
-    loadEvents();
-  }
+    const button =
+      document.getElementById("saveButton");
 
 
-  /* =====================================================
-     LOAD EVENTS
-     ===================================================== */
-
-  async function loadEvents(){
-
-    const list =
-      document.getElementById("eventsList");
-
-    const { data, error } =
-      await supabaseClient
-        .from("events")
-        .select("*")
-        .order("created_at", { ascending:false });
-
-    if(error){
-
-      list.innerHTML =
-        "<p style='color:red'>कार्यक्रम लोड करता आला नाही.</p>";
-
-      return;
-    }
-
-    if(!data || data.length === 0){
-
-      list.innerHTML =
-        "<p>अजून कोणताही कार्यक्रम सेव्ह केलेला नाही.</p>";
-
-      return;
-    }
-
-    list.innerHTML = "";
-
-    data.forEach(event => {
-
-      const div = document.createElement("div");
-
-      div.className = "event";
-
-      div.innerHTML = `
-        <h3>${escapeHtml(event.title || "")}</h3>
-
-        <p>
-          <strong>तारीख:</strong>
-          ${event.date ? new Date(event.date).toLocaleString("mr-IN") : "-"}
-        </p>
-
-        <p>
-          <strong>ठिकाण:</strong>
-          ${escapeHtml(event.location || "-")}
-        </p>
-
-        <p>
-          ${escapeHtml(event.description || "")}
-        </p>
-
-        <button class="delete"
-          onclick="deleteEvent('${event.id}')">
-          कार्यक्रम Delete करा
-        </button>
-      `;
-
-      list.appendChild(div);
-
-    });
-  }
+    message.className = "message";
+    message.textContent = "";
 
 
-  /* =====================================================
-     DELETE EVENT
-     ===================================================== */
+    if (!title) {
 
-  async function deleteEvent(id){
-
-    if(!confirm("हा कार्यक्रम Delete करायचा आहे का?")){
-      return;
-    }
-
-    const { error } =
-      await supabaseClient
-        .from("events")
-        .delete()
-        .eq("id", id);
-
-    if(error){
-
-      alert(
-        "Delete करता आले नाही: " +
-        error.message
+      showMessage(
+        message,
+        "कृपया कार्यक्रमाचे नाव भरा.",
+        "error"
       );
 
       return;
     }
 
-    loadEvents();
+
+    if (!date) {
+
+      showMessage(
+        message,
+        "कृपया कार्यक्रमाची तारीख निवडा.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (!description) {
+
+      showMessage(
+        message,
+        "कृपया कार्यक्रमाची माहिती लिहा.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    try {
+
+      button.disabled = true;
+      button.textContent = "Save होत आहे...";
+
+
+      // फोटो upload
+      let imageUrl = null;
+
+      if (imageFile) {
+
+        imageUrl =
+          await uploadImage(imageFile);
+
+      }
+
+
+      // Database मध्ये event save
+      const result =
+        await supabaseClient
+          .from("events")
+          .insert([
+            {
+              title: title,
+              date: date,
+              location: location || null,
+              image: imageUrl,
+              description: description
+            }
+          ]);
+
+
+      if (result.error) {
+        throw new Error(
+          "कार्यक्रम Save झाला नाही: " +
+          result.error.message
+        );
+      }
+
+
+      showMessage(
+        message,
+        "✅ कार्यक्रम यशस्वीपणे प्रकाशित झाला!",
+        "success"
+      );
+
+
+      // Form clear
+      document.getElementById("title").value = "";
+      document.getElementById("date").value = "";
+      document.getElementById("location").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("imageFile").value = "";
+      document.getElementById("imagePreview").innerHTML = "";
+
+
+      loadEvents();
+
+
+    } catch (error) {
+
+      showMessage(
+        message,
+        error.message,
+        "error"
+      );
+
+    } finally {
+
+      button.disabled = false;
+      button.textContent =
+        "कार्यक्रम प्रकाशित करा";
+
+    }
+
   }
 
 
-  /* =====================================================
-     LOGOUT
-     ===================================================== */
+  // -----------------------------
+  // Load Events
+  // -----------------------------
 
-  async function logout(){
+  async function loadEvents() {
 
-    await supabaseClient.auth.signOut();
+    const list =
+      document.getElementById("eventsList");
 
-    location.reload();
+    list.innerHTML =
+      "<div class='loading'>लोड होत आहे...</div>";
+
+
+    const result =
+      await supabaseClient
+        .from("events")
+        .select("*")
+        .order(
+          "date",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (result.error) {
+
+      list.innerHTML =
+        "<div class='message error'>" +
+        escapeHtml(result.error.message) +
+        "</div>";
+
+      return;
+    }
+
+
+    if (!result.data || result.data.length === 0) {
+
+      list.innerHTML =
+        "<p>अजून कोणताही कार्यक्रम जोडलेला नाही.</p>";
+
+      return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    result.data.forEach(function(event) {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "event";
+
+
+      let html = "";
+
+
+      html +=
+        "<h3>" +
+        escapeHtml(event.title || "") +
+        "</h3>";
+
+
+      if (event.date) {
+
+        html +=
+          "<div class='small'>📅 " +
+          formatDate(event.date) +
+          "</div>";
+
+      }
+
+
+      if (event.location) {
+
+        html +=
+          "<div class='small'>📍 " +
+          escapeHtml(event.location) +
+          "</div>";
+
+      }
+
+
+      if (event.description) {
+
+        html +=
+          "<p>" +
+          escapeHtml(event.description) +
+          "</p>";
+
+      }
+
+
+      if (event.image) {
+
+        html +=
+          "<img src='" +
+          escapeAttribute(event.image) +
+          "' alt='कार्यक्रमाचा फोटो'>";
+
+      }
+
+
+      div.innerHTML = html;
+
+      list.appendChild(div);
+
+    });
+
   }
 
 
-  /* =====================================================
-     SECURITY
-     ===================================================== */
+  // -----------------------------
+  // Date Format
+  // -----------------------------
 
-  function escapeHtml(text){
+  function formatDate(dateString) {
 
-    return String(text)
+    try {
+
+      const date =
+        new Date(dateString);
+
+      return date.toLocaleDateString(
+        "mr-IN",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
+        }
+      );
+
+    } catch (error) {
+
+      return dateString;
+
+    }
+
+  }
+
+
+  // -----------------------------
+  // Message
+  // -----------------------------
+
+  function showMessage(
+    element,
+    text,
+    type
+  ) {
+
+    element.textContent = text;
+
+    element.className =
+      "message " + type;
+
+  }
+
+
+  // -----------------------------
+  // Security helpers
+  // -----------------------------
+
+  function escapeHtml(value) {
+
+    return String(value)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+
   }
 
+
+  function escapeAttribute(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  }
+
+
+  // -----------------------------
+  // Start
+  // -----------------------------
 
   checkUser();
 
@@ -469,3 +921,4 @@
 
 </body>
 </html>
+    
