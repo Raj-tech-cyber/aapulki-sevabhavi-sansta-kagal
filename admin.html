@@ -21,27 +21,35 @@
     }
 
     .container {
+      width: 100%;
       max-width: 900px;
       margin: auto;
       padding: 20px;
     }
 
     .card {
-      background: #fff;
+      background: #ffffff;
       padding: 22px;
       margin-bottom: 20px;
       border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    h1, h2 {
+    h1 {
       margin-top: 0;
+      color: #1769aa;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
     }
 
     label {
       display: block;
       font-weight: bold;
-      margin: 14px 0 6px;
+      margin-top: 15px;
+      margin-bottom: 6px;
     }
 
     input,
@@ -51,6 +59,7 @@
       border: 1px solid #ccc;
       border-radius: 9px;
       font-size: 16px;
+      font-family: Arial, sans-serif;
     }
 
     textarea {
@@ -59,10 +68,11 @@
     }
 
     button {
-      border: 0;
+      border: none;
       border-radius: 9px;
       padding: 12px 20px;
-      margin-top: 12px;
+      margin-top: 15px;
+      margin-right: 8px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
@@ -70,74 +80,29 @@
 
     .primary {
       background: #1769aa;
-      color: white;
+      color: #ffffff;
     }
 
     .success {
       background: #198754;
-      color: white;
+      color: #ffffff;
     }
 
     .danger {
       background: #c62828;
-      color: white;
-    }
-
-    .secondary {
-      background: #555;
-      color: white;
+      color: #ffffff;
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .message {
+      display: none;
       padding: 12px;
       border-radius: 9px;
       margin: 12px 0;
-      display: none;
-    }
-
-    .event {
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 15px;
-      background: #fafafa;
-    }
-
-    .event-title {
-      font-size: 21px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .event-meta {
-      color: #555;
-      margin: 5px 0;
-    }
-
-    .event-description {
-      line-height: 1.6;
-      margin-top: 12px;
-      white-space: pre-wrap;
-    }
-
-    .event img {
-      width: 100%;
-      max-height: 280px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-top: 12px;
-    }
-
-    #preview {
-      max-width: 220px;
-      max-height: 160px;
-      margin-top: 10px;
-      border-radius: 10px;
-      display: none;
+      line-height: 1.5;
     }
 
     .status {
@@ -145,6 +110,56 @@
       border-radius: 9px;
       background: #eef4ff;
       margin: 12px 0;
+      line-height: 1.5;
+    }
+
+    .event {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 15px;
+    }
+
+    .event-title {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #1769aa;
+    }
+
+    .event-meta {
+      color: #555;
+      margin: 6px 0;
+    }
+
+    .event-description {
+      margin-top: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .event img {
+      display: block;
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 14px;
+    }
+
+    #preview {
+      display: none;
+      width: 220px;
+      max-height: 170px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+
+    .top-info {
+      color: #555;
+      margin-top: -5px;
     }
   </style>
 </head>
@@ -153,32 +168,38 @@
 
 <div class="container">
 
-  <!-- LOGIN -->
+  <!-- ==================================================
+       LOGIN
+       ================================================== -->
 
-  <div id="loginBox" class="card">
+  <div id="loginSection" class="card">
 
     <h1>आपुलकी सेवाभावी संस्था</h1>
+
     <h2>Admin Login</h2>
 
     <div id="loginMessage" class="message"></div>
 
-    <label>Email</label>
+    <label for="loginEmail">Email</label>
 
     <input
       type="email"
-      id="email"
+      id="loginEmail"
       placeholder="Admin Email"
+      autocomplete="email"
     >
 
-    <label>Password</label>
+    <label for="loginPassword">Password</label>
 
     <input
       type="password"
-      id="password"
+      id="loginPassword"
       placeholder="Password"
+      autocomplete="current-password"
     >
 
     <button
+      type="button"
       class="primary"
       onclick="login()"
     >
@@ -188,17 +209,24 @@
   </div>
 
 
-  <!-- ADMIN PANEL -->
+  <!-- ==================================================
+       ADMIN PANEL
+       ================================================== -->
 
-  <div id="adminPanel" class="hidden">
+  <div id="adminSection" class="hidden">
+
+    <!-- HEADER -->
 
     <div class="card">
 
       <h1>आपुलकी सेवाभावी संस्था</h1>
 
-      <p>Admin Panel</p>
+      <p class="top-info">
+        कार्यक्रम व उपक्रम व्यवस्थापन
+      </p>
 
       <button
+        type="button"
         class="danger"
         onclick="logout()"
       >
@@ -208,72 +236,80 @@
     </div>
 
 
-    <!-- ADD EVENT -->
+    <!-- ==================================================
+         ADD EVENT
+         ================================================== -->
 
     <div class="card">
 
       <h2>नवीन कार्यक्रम / उपक्रम</h2>
 
-      <div
-        id="saveMessage"
-        class="message"
-      ></div>
+      <div id="eventMessage" class="message"></div>
 
-
-      <label>कार्यक्रमाचे नाव</label>
+      <label for="eventTitle">
+        कार्यक्रमाचे नाव
+      </label>
 
       <input
         type="text"
-        id="title"
+        id="eventTitle"
         placeholder="कार्यक्रमाचे नाव"
       >
 
 
-      <label>तारीख</label>
+      <label for="eventDate">
+        तारीख
+      </label>
 
       <input
         type="date"
-        id="date"
+        id="eventDate"
       >
 
 
-      <label>ठिकाण</label>
+      <label for="eventLocation">
+        ठिकाण
+      </label>
 
       <input
         type="text"
-        id="location"
+        id="eventLocation"
         placeholder="कार्यक्रमाचे ठिकाण"
       >
 
 
-      <label>कार्यक्रमाची माहिती</label>
+      <label for="eventDescription">
+        कार्यक्रमाची माहिती
+      </label>
 
       <textarea
-        id="description"
-        placeholder="कार्यक्रमाची माहिती लिहा..."
+        id="eventDescription"
+        placeholder="कार्यक्रमाची माहिती येथे लिहा..."
       ></textarea>
 
 
-      <label>कार्यक्रमाचा फोटो</label>
+      <label for="eventImage">
+        कार्यक्रमाचा फोटो
+      </label>
 
       <input
         type="file"
-        id="image"
+        id="eventImage"
         accept="image/*"
-        onchange="previewPhoto()"
+        onchange="previewImage()"
       >
 
       <img
         id="preview"
-        alt="Photo Preview"
+        alt="फोटो Preview"
       >
-
 
       <br>
 
       <button
+        type="button"
         class="success"
-        id="saveButton"
+        id="saveEventButton"
         onclick="saveEvent()"
       >
         कार्यक्रम सेव्ह करा
@@ -282,7 +318,9 @@
     </div>
 
 
-    <!-- SAVED EVENTS -->
+    <!-- ==================================================
+         SAVED EVENTS
+         ================================================== -->
 
     <div class="card">
 
@@ -296,6 +334,7 @@
       </div>
 
       <button
+        type="button"
         class="primary"
         onclick="loadEvents()"
       >
@@ -313,253 +352,281 @@
 
 <script>
 
-  /* =====================================================
-     SUPABASE SETTINGS
-     ===================================================== */
+/* ======================================================
+   SUPABASE SETTINGS
 
-  const SUPABASE_URL =
-    "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
+   फक्त खालील दोन ठिकाणी तुमची माहिती टाका.
+   ====================================================== */
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_Cyo3uCseac7_E1FoYXc4OA_4KVjDaMP";
+const SUPABASE_URL =
+  "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Cyo3uCseac7_E1FoYXc4OA_4KVjDaMP";
 
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+/* ======================================================
+   SUPABASE CLIENT
+   ====================================================== */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* ======================================================
+   MESSAGE FUNCTION
+   ====================================================== */
+
+function showMessage(
+  elementId,
+  message,
+  success
+) {
+
+  const element =
+    document.getElementById(elementId);
+
+  element.style.display = "block";
+
+  element.innerText = message;
+
+  if (success) {
+
+    element.style.background = "#e8f5e9";
+    element.style.color = "#1b5e20";
+
+  } else {
+
+    element.style.background = "#ffebee";
+    element.style.color = "#b71c1c";
+
+  }
+}
+
+
+/* ======================================================
+   LOGIN
+   ====================================================== */
+
+async function login() {
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "loginMessage",
+      "Email आणि Password भरा.",
+      false
     );
 
+    return;
+  }
 
-  /* =====================================================
-     MESSAGE
-     ===================================================== */
 
-  function showMessage(
-    id,
-    text,
-    success
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth
+      .signInWithPassword({
+        email: email,
+        password: password
+      });
+
+
+  if (error) {
+
+    showMessage(
+      "loginMessage",
+      "Login failed: " + error.message,
+      false
+    );
+
+    return;
+  }
+
+
+  if (
+    data &&
+    data.session
   ) {
 
-    const box =
-      document.getElementById(id);
-
-    box.style.display = "block";
-
-    box.innerText = text;
-
-    box.style.background =
-      success
-        ? "#e8f5e9"
-        : "#ffebee";
-
-    box.style.color =
-      success
-        ? "#1b5e20"
-        : "#b71c1c";
-  }
-
-
-  /* =====================================================
-     LOGIN
-     ===================================================== */
-
-  async function login() {
-
-    const email =
-      document.getElementById("email")
-        .value
-        .trim();
-
-    const password =
-      document.getElementById("password")
-        .value;
-
-
-    if (!email || !password) {
-
-      showMessage(
-        "loginMessage",
-        "Email आणि Password भरा.",
-        false
-      );
-
-      return;
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth
-        .signInWithPassword({
-          email: email,
-          password: password
-        });
-
-
-    if (error) {
-
-      showMessage(
-        "loginMessage",
-        "Login failed: " +
-        error.message,
-        false
-      );
-
-      return;
-    }
-
-
-    if (data && data.session) {
-
-      document
-        .getElementById("loginBox")
-        .classList
-        .add("hidden");
-
-      document
-        .getElementById("adminPanel")
-        .classList
-        .remove("hidden");
-
-      loadEvents();
-    }
-  }
-
-
-  /* =====================================================
-     LOGOUT
-     ===================================================== */
-
-  async function logout() {
-
-    await supabaseClient.auth.signOut();
-
     document
-      .getElementById("adminPanel")
+      .getElementById("loginSection")
       .classList
       .add("hidden");
 
     document
-      .getElementById("loginBox")
+      .getElementById("adminSection")
       .classList
       .remove("hidden");
+
+
+    await loadEvents();
+  }
+}
+
+
+/* ======================================================
+   LOGOUT
+   ====================================================== */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  document
+    .getElementById("adminSection")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("loginSection")
+    .classList
+    .remove("hidden");
+}
+
+
+/* ======================================================
+   PHOTO PREVIEW
+   ====================================================== */
+
+function previewImage() {
+
+  const file =
+    document
+      .getElementById("eventImage")
+      .files[0];
+
+  const preview =
+    document.getElementById("preview");
+
+
+  if (!file) {
+
+    preview.style.display = "none";
+
+    return;
   }
 
 
-  /* =====================================================
-     PHOTO PREVIEW
-     ===================================================== */
+  preview.src =
+    URL.createObjectURL(file);
 
-  function previewPhoto() {
-
-    const file =
-      document
-        .getElementById("image")
-        .files[0];
-
-    const preview =
-      document.getElementById("preview");
+  preview.style.display =
+    "block";
+}
 
 
-    if (!file) {
+/* ======================================================
+   SAVE EVENT
+   ====================================================== */
 
-      preview.style.display = "none";
+async function saveEvent() {
 
-      return;
-    }
+  const title =
+    document
+      .getElementById("eventTitle")
+      .value
+      .trim();
+
+  const date =
+    document
+      .getElementById("eventDate")
+      .value;
+
+  const location =
+    document
+      .getElementById("eventLocation")
+      .value
+      .trim();
+
+  const description =
+    document
+      .getElementById("eventDescription")
+      .value
+      .trim();
+
+  const file =
+    document
+      .getElementById("eventImage")
+      .files[0];
+
+  const saveButton =
+    document.getElementById(
+      "saveEventButton"
+    );
 
 
-    preview.src =
-      URL.createObjectURL(file);
+  if (!title) {
 
-    preview.style.display =
-      "block";
+    showMessage(
+      "eventMessage",
+      "कार्यक्रमाचे नाव भरा.",
+      false
+    );
+
+    return;
   }
 
 
-  /* =====================================================
-     SAVE EVENT
-     ===================================================== */
+  if (!date) {
 
-  async function saveEvent() {
+    showMessage(
+      "eventMessage",
+      "तारीख निवडा.",
+      false
+    );
 
-    const title =
-      document
-        .getElementById("title")
-        .value
-        .trim();
-
-    const date =
-      document
-        .getElementById("date")
-        .value;
-
-    const location =
-      document
-        .getElementById("location")
-        .value
-        .trim();
-
-    const description =
-      document
-        .getElementById("description")
-        .value
-        .trim();
-
-    const file =
-      document
-        .getElementById("image")
-        .files[0];
+    return;
+  }
 
 
-    if (!title) {
-
-      showMessage(
-        "saveMessage",
-        "कार्यक्रमाचे नाव भरा.",
-        false
-      );
-
-      return;
-    }
+  saveButton.disabled = true;
+  saveButton.innerText = "सेव्ह होत आहे...";
 
 
-    if (!date) {
-
-      showMessage(
-        "saveMessage",
-        "तारीख निवडा.",
-        false
-      );
-
-      return;
-    }
-
+  try {
 
     let imageUrl = null;
 
 
-    /* PHOTO */
+    /* ----------------------------------------------
+       PHOTO UPLOAD
+       ---------------------------------------------- */
 
     if (file) {
 
-      const fileName =
-        Date.now() +
-        "-" +
-        file.name.replace(
-          /\s+/g,
-          "-"
-        );
+      const safeFileName =
+        file.name
+          .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "-"
+          );
 
       const filePath =
-        "events/" + fileName;
+        "events/" +
+        Date.now() +
+        "-" +
+        safeFileName;
 
 
       const {
-        error
+        error: uploadError
       } =
         await supabaseClient.storage
           .from("uploads")
@@ -572,12 +639,12 @@
           );
 
 
-      if (error) {
+      if (uploadError) {
 
         showMessage(
-          "saveMessage",
+          "eventMessage",
           "फोटो Upload झाला नाही: " +
-          error.message,
+          uploadError.message,
           false
         );
 
@@ -586,7 +653,7 @@
 
 
       const {
-        data
+        data: publicData
       } =
         supabaseClient.storage
           .from("uploads")
@@ -596,14 +663,16 @@
 
 
       imageUrl =
-        data.publicUrl;
+        publicData.publicUrl;
     }
 
 
-    /* DATABASE */
+    /* ----------------------------------------------
+       SAVE EVENT
+       ---------------------------------------------- */
 
     const {
-      error
+      error: insertError
     } =
       await supabaseClient
         .from("events")
@@ -611,18 +680,17 @@
           title: title,
           date: date,
           description: description,
-          location:
-            location || null,
+          location: location || null,
           image: imageUrl
         });
 
 
-    if (error) {
+    if (insertError) {
 
       showMessage(
-        "saveMessage",
+        "eventMessage",
         "कार्यक्रम सेव्ह झाला नाही: " +
-        error.message,
+        insertError.message,
         false
       );
 
@@ -631,32 +699,34 @@
 
 
     showMessage(
-      "saveMessage",
+      "eventMessage",
       "कार्यक्रम यशस्वीपणे सेव्ह झाला.",
       true
     );
 
 
-    /* CLEAR FORM */
+    /* ----------------------------------------------
+       CLEAR FORM
+       ---------------------------------------------- */
 
     document
-      .getElementById("title")
+      .getElementById("eventTitle")
       .value = "";
 
     document
-      .getElementById("date")
+      .getElementById("eventDate")
       .value = "";
 
     document
-      .getElementById("location")
+      .getElementById("eventLocation")
       .value = "";
 
     document
-      .getElementById("description")
+      .getElementById("eventDescription")
       .value = "";
 
     document
-      .getElementById("image")
+      .getElementById("eventImage")
       .value = "";
 
     document
@@ -665,38 +735,56 @@
       .display = "none";
 
 
-    /* LOAD AGAIN */
+    /* ----------------------------------------------
+       LOAD SAVED EVENTS
+       ---------------------------------------------- */
 
     await loadEvents();
+
+  } catch (error) {
+
+    showMessage(
+      "eventMessage",
+      "Error: " + error.message,
+      false
+    );
+
+  } finally {
+
+    saveButton.disabled = false;
+    saveButton.innerText =
+      "कार्यक्रम सेव्ह करा";
   }
+}
 
 
-  /* =====================================================
-     FINAL EVENT LOADER
-     ===================================================== */
+/* ======================================================
+   LOAD SAVED EVENTS
 
-  async function loadEvents() {
+   येथे direct SELECT न वापरता
+   get_admin_events() RPC वापरले आहे.
+   ====================================================== */
 
-    const status =
-      document
-        .getElementById("eventsStatus");
+async function loadEvents() {
 
-    const list =
-      document
-        .getElementById("eventsList");
+  const status =
+    document.getElementById(
+      "eventsStatus"
+    );
 
-
-    status.innerText =
-      "कार्यक्रमांची माहिती लोड होत आहे...";
-
-    list.innerHTML = "";
+  const list =
+    document.getElementById(
+      "eventsList"
+    );
 
 
-    /*
-      महत्त्वाचे:
-      आता direct SELECT नाही.
-      Supabase RPC function वापरतो.
-    */
+  status.innerText =
+    "कार्यक्रमांची माहिती लोड होत आहे...";
+
+  list.innerHTML = "";
+
+
+  try {
 
     const {
       data,
@@ -708,6 +796,21 @@
         );
 
 
+    console.log(
+      "get_admin_events data:",
+      data
+    );
+
+    console.log(
+      "get_admin_events error:",
+      error
+    );
+
+
+    /* ----------------------------------------------
+       ERROR
+       ---------------------------------------------- */
+
     if (error) {
 
       status.innerText =
@@ -718,7 +821,14 @@
     }
 
 
-    if (!data || data.length === 0) {
+    /* ----------------------------------------------
+       NO DATA
+       ---------------------------------------------- */
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       status.innerText =
         "सध्या कोणताही कार्यक्रम सेव्ह केलेला नाही.";
@@ -726,6 +836,10 @@
       return;
     }
 
+
+    /* ----------------------------------------------
+       DATA FOUND
+       ---------------------------------------------- */
 
     status.innerText =
       data.length +
@@ -735,47 +849,57 @@
     data.forEach(
       function(event) {
 
-        const div =
+        const eventBox =
           document.createElement(
             "div"
           );
 
-        div.className =
+        eventBox.className =
           "event";
 
 
         let html = "";
 
 
+        /* TITLE */
+
         html +=
           '<div class="event-title">' +
           escapeHtml(
             event.title || ""
           ) +
-          '</div>';
+          "</div>";
 
+
+        /* DATE */
 
         if (event.date) {
 
           html +=
-            '<div class="event-meta">📅 ' +
+            '<div class="event-meta">' +
+            "📅 " +
             escapeHtml(
-              event.date
+              formatDate(event.date)
             ) +
-            '</div>';
+            "</div>";
         }
 
+
+        /* LOCATION */
 
         if (event.location) {
 
           html +=
-            '<div class="event-meta">📍 ' +
+            '<div class="event-meta">' +
+            "📍 " +
             escapeHtml(
               event.location
             ) +
-            '</div>';
+            "</div>";
         }
 
+
+        /* DESCRIPTION */
 
         if (event.description) {
 
@@ -784,9 +908,11 @@
             escapeHtml(
               event.description
             ) +
-            '</div>';
+            "</div>";
         }
 
+
+        /* IMAGE */
 
         if (event.image) {
 
@@ -799,105 +925,155 @@
         }
 
 
-        div.innerHTML =
+        eventBox.innerHTML =
           html;
 
 
         list.appendChild(
-          div
+          eventBox
         );
 
       }
     );
+
+
+  } catch (error) {
+
+    console.error(
+      "loadEvents error:",
+      error
+    );
+
+    status.innerText =
+      "कार्यक्रम लोड करताना Error: " +
+      error.message;
+  }
+}
+
+
+/* ======================================================
+   DATE FORMAT
+   ====================================================== */
+
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "";
   }
 
 
-  /* =====================================================
-     SECURITY
-     ===================================================== */
+  const parts =
+    String(dateValue)
+      .split("-");
 
-  function escapeHtml(value) {
 
-    return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
-      );
+  if (parts.length === 3) {
+
+    return (
+      parts[2] +
+      "-" +
+      parts[1] +
+      "-" +
+      parts[0]
+    );
   }
 
 
-  function escapeAttribute(value) {
+  return String(dateValue);
+}
 
-    return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      );
+
+/* ======================================================
+   HTML SECURITY
+   ====================================================== */
+
+function escapeHtml(value) {
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+}
+
+
+function escapeAttribute(value) {
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    );
+}
+
+
+/* ======================================================
+   CHECK EXISTING LOGIN SESSION
+   ====================================================== */
+
+async function checkSession() {
+
+  const {
+    data
+  } =
+    await supabaseClient.auth
+      .getSession();
+
+
+  if (
+    data &&
+    data.session
+  ) {
+
+    document
+      .getElementById("loginSection")
+      .classList
+      .add("hidden");
+
+    document
+      .getElementById("adminSection")
+      .classList
+      .remove("hidden");
+
+
+    await loadEvents();
   }
+}
 
 
-  /* =====================================================
-     EXISTING SESSION
-     ===================================================== */
+/* ======================================================
+   START
+   ====================================================== */
 
-  async function checkSession() {
-
-    const {
-      data
-    } =
-      await supabaseClient.auth
-        .getSession();
-
-
-    if (
-      data &&
-      data.session
-    ) {
-
-      document
-        .getElementById("loginBox")
-        .classList
-        .add("hidden");
-
-      document
-        .getElementById("adminPanel")
-        .classList
-        .remove("hidden");
-
-      loadEvents();
-    }
-  }
-
-
-  checkSession();
+checkSession();
 
 </script>
 
