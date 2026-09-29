@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>आपुलकी सेवाभावी संस्था - Admin Panel</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,39 +27,45 @@
     }
 
     .card {
-      background: white;
-      padding: 20px;
+      background: #fff;
+      padding: 22px;
       margin-bottom: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.08);
     }
 
     h1, h2 {
       margin-top: 0;
     }
 
-    input, textarea {
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 14px 0 6px;
+    }
+
+    input,
+    textarea {
       width: 100%;
       padding: 12px;
-      margin: 7px 0 15px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 16px;
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 130px;
       resize: vertical;
     }
 
     button {
       border: 0;
-      border-radius: 8px;
-      padding: 12px 18px;
+      border-radius: 9px;
+      padding: 12px 20px;
+      margin-top: 12px;
       font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      margin-right: 8px;
-      margin-bottom: 8px;
     }
 
     .primary {
@@ -67,7 +74,7 @@
     }
 
     .success {
-      background: #16823b;
+      background: #198754;
       color: white;
     }
 
@@ -77,7 +84,7 @@
     }
 
     .secondary {
-      background: #666;
+      background: #555;
       color: white;
     }
 
@@ -87,51 +94,57 @@
 
     .message {
       padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      border-radius: 9px;
+      margin: 12px 0;
       display: none;
     }
 
     .event {
       border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 12px;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 15px;
       background: #fafafa;
     }
 
-    .event img {
-      max-width: 100%;
-      max-height: 250px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
     .event-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: bold;
       margin-bottom: 8px;
     }
 
-    .small {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 8px;
+    .event-meta {
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .event-description {
+      line-height: 1.6;
+      margin-top: 12px;
+      white-space: pre-wrap;
+    }
+
+    .event img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 12px;
     }
 
     #preview {
-      max-width: 200px;
-      max-height: 150px;
+      max-width: 220px;
+      max-height: 160px;
       margin-top: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       display: none;
     }
 
     .status {
-      padding: 10px;
+      padding: 12px;
+      border-radius: 9px;
       background: #eef4ff;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      margin: 12px 0;
     }
   </style>
 </head>
@@ -141,79 +154,128 @@
 <div class="container">
 
   <!-- LOGIN -->
-  <div id="loginSection" class="card">
+
+  <div id="loginBox" class="card">
+
     <h1>आपुलकी सेवाभावी संस्था</h1>
     <h2>Admin Login</h2>
 
     <div id="loginMessage" class="message"></div>
 
     <label>Email</label>
-    <input type="email" id="loginEmail" placeholder="Admin Email">
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin Email"
+    >
 
     <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="Password">
 
-    <button class="primary" onclick="login()">Login</button>
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
+
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      Login
+    </button>
+
   </div>
 
 
-  <!-- ADMIN -->
-  <div id="adminSection" class="hidden">
+  <!-- ADMIN PANEL -->
+
+  <div id="adminPanel" class="hidden">
 
     <div class="card">
+
       <h1>आपुलकी सेवाभावी संस्था</h1>
+
       <p>Admin Panel</p>
 
-      <button class="danger" onclick="logout()">Logout</button>
+      <button
+        class="danger"
+        onclick="logout()"
+      >
+        Logout
+      </button>
+
     </div>
 
 
     <!-- ADD EVENT -->
+
     <div class="card">
 
       <h2>नवीन कार्यक्रम / उपक्रम</h2>
 
-      <div id="eventMessage" class="message"></div>
+      <div
+        id="saveMessage"
+        class="message"
+      ></div>
+
 
       <label>कार्यक्रमाचे नाव</label>
+
       <input
         type="text"
-        id="eventTitle"
+        id="title"
         placeholder="कार्यक्रमाचे नाव"
       >
 
+
       <label>तारीख</label>
+
       <input
         type="date"
-        id="eventDate"
+        id="date"
       >
 
+
       <label>ठिकाण</label>
+
       <input
         type="text"
-        id="eventLocation"
+        id="location"
         placeholder="कार्यक्रमाचे ठिकाण"
       >
 
+
       <label>कार्यक्रमाची माहिती</label>
+
       <textarea
-        id="eventDescription"
-        placeholder="कार्यक्रमाची माहिती येथे लिहा..."
+        id="description"
+        placeholder="कार्यक्रमाची माहिती लिहा..."
       ></textarea>
 
+
       <label>कार्यक्रमाचा फोटो</label>
+
       <input
         type="file"
-        id="eventImage"
+        id="image"
         accept="image/*"
-        onchange="previewImage()"
+        onchange="previewPhoto()"
       >
 
-      <img id="preview">
+      <img
+        id="preview"
+        alt="Photo Preview"
+      >
 
-      <br><br>
 
-      <button class="success" onclick="saveEvent()">
+      <br>
+
+      <button
+        class="success"
+        id="saveButton"
+        onclick="saveEvent()"
+      >
         कार्यक्रम सेव्ह करा
       </button>
 
@@ -221,15 +283,22 @@
 
 
     <!-- SAVED EVENTS -->
+
     <div class="card">
 
       <h2>Saved Events</h2>
 
-      <div class="status" id="eventsStatus">
+      <div
+        id="eventsStatus"
+        class="status"
+      >
         कार्यक्रमांची माहिती लोड होत आहे...
       </div>
 
-      <button class="primary" onclick="loadEvents()">
+      <button
+        class="primary"
+        onclick="loadEvents()"
+      >
         Refresh
       </button>
 
@@ -244,48 +313,68 @@
 
 <script>
 
-  // =====================================================
-  // तुमचे Supabase Details
-  // =====================================================
+  /* =====================================================
+     SUPABASE SETTINGS
+     ===================================================== */
 
-  const SUPABASE_URL = "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = 
+  const SUPABASE_URL =
+    "https://mwwhzjuxfhbrqzxhfglj.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_Cyo3uCseac7_E1FoYXc4OA_4KVjDaMP";
 
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
-  // =====================================================
-  // Message
-  // =====================================================
+  /* =====================================================
+     MESSAGE
+     ===================================================== */
 
-  function showMessage(id, message, success = true) {
+  function showMessage(
+    id,
+    text,
+    success
+  ) {
 
-    const box = document.getElementById(id);
+    const box =
+      document.getElementById(id);
 
     box.style.display = "block";
-    box.innerText = message;
 
-    box.style.background = success ? "#e8f5e9" : "#ffebee";
-    box.style.color = success ? "#1b5e20" : "#b71c1c";
+    box.innerText = text;
+
+    box.style.background =
+      success
+        ? "#e8f5e9"
+        : "#ffebee";
+
+    box.style.color =
+      success
+        ? "#1b5e20"
+        : "#b71c1c";
   }
 
 
-  // =====================================================
-  // LOGIN
-  // =====================================================
+  /* =====================================================
+     LOGIN
+     ===================================================== */
 
   async function login() {
 
     const email =
-      document.getElementById("loginEmail").value.trim();
+      document.getElementById("email")
+        .value
+        .trim();
 
     const password =
-      document.getElementById("loginPassword").value;
+      document.getElementById("password")
+        .value;
+
 
     if (!email || !password) {
 
@@ -298,99 +387,138 @@
       return;
     }
 
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email: email,
+          password: password
+        });
+
 
     if (error) {
 
       showMessage(
         "loginMessage",
-        "Login failed: " + error.message,
+        "Login failed: " +
+        error.message,
         false
       );
 
       return;
     }
 
-    document.getElementById("loginSection")
-      .classList.add("hidden");
 
-    document.getElementById("adminSection")
-      .classList.remove("hidden");
+    if (data && data.session) {
 
-    loadEvents();
+      document
+        .getElementById("loginBox")
+        .classList
+        .add("hidden");
+
+      document
+        .getElementById("adminPanel")
+        .classList
+        .remove("hidden");
+
+      loadEvents();
+    }
   }
 
 
-  // =====================================================
-  // LOGOUT
-  // =====================================================
+  /* =====================================================
+     LOGOUT
+     ===================================================== */
 
   async function logout() {
 
     await supabaseClient.auth.signOut();
 
-    document.getElementById("adminSection")
-      .classList.add("hidden");
+    document
+      .getElementById("adminPanel")
+      .classList
+      .add("hidden");
 
-    document.getElementById("loginSection")
-      .classList.remove("hidden");
+    document
+      .getElementById("loginBox")
+      .classList
+      .remove("hidden");
   }
 
 
-  // =====================================================
-  // IMAGE PREVIEW
-  // =====================================================
+  /* =====================================================
+     PHOTO PREVIEW
+     ===================================================== */
 
-  function previewImage() {
+  function previewPhoto() {
 
     const file =
-      document.getElementById("eventImage").files[0];
+      document
+        .getElementById("image")
+        .files[0];
 
     const preview =
       document.getElementById("preview");
 
+
     if (!file) {
 
       preview.style.display = "none";
+
       return;
     }
 
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = "block";
+
+    preview.src =
+      URL.createObjectURL(file);
+
+    preview.style.display =
+      "block";
   }
 
 
-  // =====================================================
-  // SAVE EVENT
-  // =====================================================
+  /* =====================================================
+     SAVE EVENT
+     ===================================================== */
 
   async function saveEvent() {
 
     const title =
-      document.getElementById("eventTitle").value.trim();
+      document
+        .getElementById("title")
+        .value
+        .trim();
 
     const date =
-      document.getElementById("eventDate").value;
+      document
+        .getElementById("date")
+        .value;
 
     const location =
-      document.getElementById("eventLocation").value.trim();
+      document
+        .getElementById("location")
+        .value
+        .trim();
 
     const description =
-      document.getElementById("eventDescription")
-        .value.trim();
+      document
+        .getElementById("description")
+        .value
+        .trim();
 
     const file =
-      document.getElementById("eventImage").files[0];
+      document
+        .getElementById("image")
+        .files[0];
 
 
     if (!title) {
 
       showMessage(
-        "eventMessage",
+        "saveMessage",
         "कार्यक्रमाचे नाव भरा.",
         false
       );
@@ -402,7 +530,7 @@
     if (!date) {
 
       showMessage(
-        "eventMessage",
+        "saveMessage",
         "तारीख निवडा.",
         false
       );
@@ -414,34 +542,42 @@
     let imageUrl = null;
 
 
-    // =================================================
-    // IMAGE UPLOAD
-    // =================================================
+    /* PHOTO */
 
     if (file) {
 
       const fileName =
-        Date.now() + "-" +
-        file.name.replace(/\s+/g, "-");
+        Date.now() +
+        "-" +
+        file.name.replace(
+          /\s+/g,
+          "-"
+        );
 
       const filePath =
         "events/" + fileName;
 
 
-      const { error: uploadError } =
+      const {
+        error
+      } =
         await supabaseClient.storage
           .from("uploads")
-          .upload(filePath, file, {
-            upsert: false
-          });
+          .upload(
+            filePath,
+            file,
+            {
+              upsert: false
+            }
+          );
 
 
-      if (uploadError) {
+      if (error) {
 
         showMessage(
-          "eventMessage",
+          "saveMessage",
           "फोटो Upload झाला नाही: " +
-          uploadError.message,
+          error.message,
           false
         );
 
@@ -449,37 +585,42 @@
       }
 
 
-      const { data: publicData } =
+      const {
+        data
+      } =
         supabaseClient.storage
           .from("uploads")
-          .getPublicUrl(filePath);
+          .getPublicUrl(
+            filePath
+          );
 
 
-      imageUrl = publicData.publicUrl;
+      imageUrl =
+        data.publicUrl;
     }
 
 
-    // =================================================
-    // DATABASE INSERT
-    // =================================================
+    /* DATABASE */
 
-    const { data, error } =
+    const {
+      error
+    } =
       await supabaseClient
         .from("events")
         .insert({
           title: title,
           date: date,
           description: description,
-          location: location || null,
+          location:
+            location || null,
           image: imageUrl
-        })
-        .select();
+        });
 
 
     if (error) {
 
       showMessage(
-        "eventMessage",
+        "saveMessage",
         "कार्यक्रम सेव्ह झाला नाही: " +
         error.message,
         false
@@ -490,41 +631,59 @@
 
 
     showMessage(
-      "eventMessage",
+      "saveMessage",
       "कार्यक्रम यशस्वीपणे सेव्ह झाला.",
       true
     );
 
 
-    // FORM CLEAR
+    /* CLEAR FORM */
 
-    document.getElementById("eventTitle").value = "";
-    document.getElementById("eventDate").value = "";
-    document.getElementById("eventLocation").value = "";
-    document.getElementById("eventDescription").value = "";
-    document.getElementById("eventImage").value = "";
+    document
+      .getElementById("title")
+      .value = "";
 
-    document.getElementById("preview").style.display =
-      "none";
+    document
+      .getElementById("date")
+      .value = "";
+
+    document
+      .getElementById("location")
+      .value = "";
+
+    document
+      .getElementById("description")
+      .value = "";
+
+    document
+      .getElementById("image")
+      .value = "";
+
+    document
+      .getElementById("preview")
+      .style
+      .display = "none";
 
 
-    // LIST REFRESH
+    /* LOAD AGAIN */
 
     await loadEvents();
   }
 
 
-  // =====================================================
-  // LOAD EVENTS
-  // =====================================================
+  /* =====================================================
+     FINAL EVENT LOADER
+     ===================================================== */
 
   async function loadEvents() {
 
-    const list =
-      document.getElementById("eventsList");
-
     const status =
-      document.getElementById("eventsStatus");
+      document
+        .getElementById("eventsStatus");
+
+    const list =
+      document
+        .getElementById("eventsList");
 
 
     status.innerText =
@@ -533,19 +692,26 @@
     list.innerHTML = "";
 
 
-    const { data, error } =
+    /*
+      महत्त्वाचे:
+      आता direct SELECT नाही.
+      Supabase RPC function वापरतो.
+    */
+
+    const {
+      data,
+      error
+    } =
       await supabaseClient
-        .from("events")
-        .select("*")
-        .order("date", {
-          ascending: false
-        });
+        .rpc(
+          "get_admin_events"
+        );
 
 
     if (error) {
 
       status.innerText =
-        "Events लोड करताना Error: " +
+        "कार्यक्रम लोड करताना Error: " +
         error.message;
 
       return;
@@ -566,110 +732,165 @@
       " कार्यक्रम सापडले.";
 
 
-    data.forEach(function(event) {
+    data.forEach(
+      function(event) {
 
-      const div =
-        document.createElement("div");
+        const div =
+          document.createElement(
+            "div"
+          );
 
-      div.className = "event";
-
-
-      let html = "";
-
-      html +=
-        '<div class="event-title">' +
-        escapeHtml(event.title || "") +
-        '</div>';
+        div.className =
+          "event";
 
 
-      if (event.date) {
+        let html = "";
+
 
         html +=
-          '<div class="small">📅 ' +
-          escapeHtml(event.date) +
+          '<div class="event-title">' +
+          escapeHtml(
+            event.title || ""
+          ) +
           '</div>';
+
+
+        if (event.date) {
+
+          html +=
+            '<div class="event-meta">📅 ' +
+            escapeHtml(
+              event.date
+            ) +
+            '</div>';
+        }
+
+
+        if (event.location) {
+
+          html +=
+            '<div class="event-meta">📍 ' +
+            escapeHtml(
+              event.location
+            ) +
+            '</div>';
+        }
+
+
+        if (event.description) {
+
+          html +=
+            '<div class="event-description">' +
+            escapeHtml(
+              event.description
+            ) +
+            '</div>';
+        }
+
+
+        if (event.image) {
+
+          html +=
+            '<img src="' +
+            escapeAttribute(
+              event.image
+            ) +
+            '" alt="कार्यक्रमाचा फोटो">';
+        }
+
+
+        div.innerHTML =
+          html;
+
+
+        list.appendChild(
+          div
+        );
+
       }
-
-
-      if (event.location) {
-
-        html +=
-          '<div class="small">📍 ' +
-          escapeHtml(event.location) +
-          '</div>';
-      }
-
-
-      if (event.description) {
-
-        html +=
-          '<p>' +
-          escapeHtml(event.description) +
-          '</p>';
-      }
-
-
-      if (event.image) {
-
-        html +=
-          '<img src="' +
-          escapeAttribute(event.image) +
-          '" alt="कार्यक्रमाचा फोटो">';
-      }
-
-
-      div.innerHTML = html;
-
-      list.appendChild(div);
-
-    });
-
+    );
   }
 
 
-  // =====================================================
-  // SECURITY HELPERS
-  // =====================================================
+  /* =====================================================
+     SECURITY
+     ===================================================== */
 
   function escapeHtml(value) {
 
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
   }
 
 
   function escapeAttribute(value) {
 
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      );
   }
 
 
-  // =====================================================
-  // CHECK EXISTING SESSION
-  // =====================================================
+  /* =====================================================
+     EXISTING SESSION
+     ===================================================== */
 
   async function checkSession() {
 
     const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+      data
+    } =
+      await supabaseClient.auth
+        .getSession();
 
 
-    if (session) {
+    if (
+      data &&
+      data.session
+    ) {
 
-      document.getElementById("loginSection")
-        .classList.add("hidden");
+      document
+        .getElementById("loginBox")
+        .classList
+        .add("hidden");
 
-      document.getElementById("adminSection")
-        .classList.remove("hidden");
+      document
+        .getElementById("adminPanel")
+        .classList
+        .remove("hidden");
 
       loadEvents();
     }
